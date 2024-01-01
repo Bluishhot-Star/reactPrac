@@ -1,0 +1,131 @@
+@font-face {
+  font-family: 'SUITE-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+*{
+  box-sizing: border-box;
+  font-family: 'SUITE-Regular';
+  color: #333;
+}
+.navbar-brand{
+  cursor: pointer;
+}
+.nav-container{
+
+}
+.App{
+  min-height: 100vh;
+  background: #222222;
+}
+.navbar{
+  padding: 5px 10px;
+  background: #e31d2e;
+  border: none;
+}
+
+.main-bg{
+  height: 300px;
+  width: 100%;
+  background: #aaa;
+  background-image: url('./redshoes.jpeg');
+  background-size:cover;
+  background-position: 0%;
+}
+.item-container{
+  width: 100%;
+  height: auto;
+  min-height: 230px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+.item{
+  width: 100%;
+  height: auto;
+  background: #efefef;
+  border-radius: 10px;
+  position: relative;
+}
+.item img{
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+.item .item-title{
+  all: unset;
+  display: block;
+  padding: 0 5px;
+  margin: 5px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+.item p{
+  padding: 0 5px;
+  margin: 0;
+  color: #333;
+}
+.item .item-price{
+  font-size: 1.2rem;
+}
+.item .item-content{
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+/* 상세 페이지 */
+.item-detail-container{
+  background: #efefef;
+  padding: 10px;
+}
+.item-detail-title{
+  color: #333;
+  font-weight: bold;
+}
+.item-detail-price{
+  color:#333;
+}
+.item-detail-content{
+  color: #333;
+}
+.alert{
+  animation: buzz .2s infinite ;
+}
+.alert.deleted{
+  opacity: 0;
+}
+/* 404 ERROR */
+.error404{
+  color: #fff;
+  margin-top: 20px;
+  text-align: center;
+}
+
+@keyframes buzz {
+  0%{
+    transform: translateX(-50.5%);
+  }
+  50%{
+    transform: translateX(-49.5%);
+  }
+  100%{
+    transform: translateX(-50.5%);
+  }
+}
+
+
+
+
+
+*{
+  color: #efefef;
+}
+a{
+  text-decoration: none;
+}
