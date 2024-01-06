@@ -3,16 +3,72 @@
 import './App.css';
 import {Button, Container, Nav, Navbar} from 'react-bootstrap';
 import './redshoes.jpeg'
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import data from './data.js'
 import Item from './components/Item.js'
 import Detail from './pages/Detail.js'
+import styled from "styled-components"
+import axios from "axios"
 import { Routes, Route, Link, useNavigate, Outlet, useParams } from 'react-router-dom'
-
+let Alert = styled.div`
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 100px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #96e47c;
+  transition: 1s;
+  border: 3px solid #6bb653;
+  box-shadow: 2px 2px 5px #8f8f8f, -1px -1px 3px #8f8f8f;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+  z-index:1;
+`;
 function App() {
-  const [shoes] = useState(data)
+  const [shoes, setShoes] = useState(data)
   let navigate = useNavigate();
 
+  let alertRef = useRef();
+
+  const [moreData, setMoreData] = useState(2);
+
+  const [moreBtnState, setMoreBtnState] = useState(true);
+
+  const getMoreData = async()=>{
+    await axios.get(`https://codingapple1.github.io/shop/data${moreData}.json`)
+    .then((res)=>{
+      console.log(res.data);
+      setMoreData(moreData+1)
+      let copy = [...shoes, ...res.data];
+      setShoes(copy);
+    })
+    .catch((err)=>{
+      console.log(err);
+      setMoreBtnState(false)
+    })
+  }
+  useEffect(()=>{
+    if(alertRef.current){
+      try{
+        alertRef.current.classList.remove("deleted");
+        let time = setTimeout(() => {
+          alertRef.current.classList += " deleted"
+        }, 4000);
+        return(()=>{
+          clearTimeout(time)
+        })
+      }
+      catch{
+        
+      }
+    }
+  })
   return (
     <div className="App">
       {/* Nav bar */}
@@ -32,22 +88,34 @@ function App() {
         {/* Main Page */}
         <Route path='/' element={
           <>
+            {!moreBtnState ? <Alert ref={alertRef} className='alert more deleted'>모든 데이터 로드 완료!</Alert> : null}
             <div className="main-bg"></div>
-              <div className="item-container">
-                {
-                  data.map(function(a,i) {
-                    const idx = i+1
-                    return(
-                    <Link to={"/detail/"+idx} key={i}><Item data={data} i={i} /></Link>
-                    )
-                  })
-                }
-              </div>
+            <div className="item-container">
+              {
+                shoes.map(function(a,i) {
+                  const idx = i+1
+                  return(
+                  <Link to={"/detail/"+idx} key={i}><Item data={shoes} i={i} /></Link>
+                  )
+                })
+              }
+            </div>
+            {
+              moreBtnState ? 
+
+                <div className='moreBtn' onClick={()=>{
+                  getMoreData()
+                }}>
+                  더보기 ⬇︎
+                </div>
+              :
+                null
+            }
           </>
         }></Route>
 
         {/* Detail Page */}
-        <Route path={"/detail/:idx"} element={<Detail data={data}/>}></Route>
+        <Route path={"/detail/:idx"} element={<Detail data={shoes}/>}></Route>
         {/* {
           data.map(function(a,i) {
             const idx = i+1

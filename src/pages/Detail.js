@@ -44,17 +44,25 @@ let Alert = styled.div`
 `;
 
 function Detail(props){
-  useEffect(() => {
-    console.log("HELLO!")
-  })
+  let alertRef = useRef();
   useEffect(()=>{
-    alertRef.current.classList.remove("deleted");
-    let time = setTimeout(() => {
-      alertRef.current.classList += " deleted"
-    }, 4000);
+    if(alertRef.current){
+      try{
+        alertRef.current.classList.remove("deleted");
+        let time = setTimeout(() => {
+          alertRef.current.classList += " deleted"
+        }, 4000);
+        return(()=>{
+          clearTimeout(time)
+        })
+      }
+      catch{
+        
+      }
+    }
   },[])
   let [count, setCount] = useState(0);
-  let alertRef = useRef();
+  
   let {idx} = useParams();
   let navigate = useNavigate();
   let item;

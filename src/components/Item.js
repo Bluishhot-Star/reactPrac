@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 function Item(props) {
-  const imgIdx = props.i+1
+  const [imgIdx, setImgIdx] = useState(props.i+1);
   return(
     <div className="item">
       <img src={"https://codingapple1.github.io/shop/shoes"+imgIdx+".jpg"} width="80%" />
