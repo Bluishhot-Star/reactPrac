@@ -6,6 +6,9 @@ import './redshoes.jpeg'
 import { useState, useRef, useEffect } from "react";
 import data from './data.js'
 import Item from './components/Item.js'
+import Tab1 from './components/Tab1.js'
+import Tab2 from './components/Tab2.js'
+import Tab3 from './components/Tab3.js'
 import Detail from './pages/Detail.js'
 import styled from "styled-components"
 import axios from "axios"
@@ -35,18 +38,22 @@ function App() {
   let navigate = useNavigate();
 
   let alertRef = useRef();
+  let loadingRef = useRef();
 
   const [moreData, setMoreData] = useState(2);
 
   const [moreBtnState, setMoreBtnState] = useState(true);
+  const [loadingState, setLoadingState] = useState(false);
 
   const getMoreData = async()=>{
+    setLoadingState(true);
     await axios.get(`https://codingapple1.github.io/shop/data${moreData}.json`)
     .then((res)=>{
       console.log(res.data);
       setMoreData(moreData+1)
       let copy = [...shoes, ...res.data];
       setShoes(copy);
+      setLoadingState(false);
     })
     .catch((err)=>{
       console.log(err);
@@ -69,6 +76,62 @@ function App() {
       }
     }
   })
+  useEffect(()=>{
+    if(loadingRef.current){
+      try{
+        if(loadingState){
+          loadingRef.current.classList.remove("deleted");
+        }
+        else{
+          if(!loadingRef.current.classList.contains("deleted")){
+            loadingRef.current.classList += " deleted"
+          }
+        }
+      }
+      catch{
+        
+      }
+    }
+  },[loadingState])
+
+  const tabBtnRef = useRef([]);
+  const [tabIdx, setTabIdx] = useState(0)
+  const tabClick = (idx)=>{
+    if(tabIdx !== idx){
+      tabBtnRef.current[tabIdx].classList.remove("selected");
+      tabBtnRef.current[idx].classList += " selected";
+      setTabIdx(idx);
+    }
+  }
+  useEffect(()=>{
+    tabBtnRef.current[tabIdx].classList += " selected";
+  },[])
+
+  // const RenderTab = (props)=>{
+  //   switch (props.idx) {
+  //     case 0:
+  //       return <Tab1/>;
+  //       break;
+  //     case 1:
+  //       return(<Tab2/>)
+  //       break;
+  //     case 2:
+  //       return(<Tab3/>)
+  //       break;
+    
+  //     default:
+  //       return(<Tab1/>)
+  //       break;
+  //   }
+    
+  // }
+  // function RenderTab({idx}){
+  //   return [ <Tab1/>,  <Tab2/>,  <Tab3/> ][idx]
+  // }
+  function RenderTab(props){
+    return [ <Tab1/>,  <Tab2/>,  <Tab3/> ][props.idx]
+  }
+
   return (
     <div className="App">
       {/* Nav bar */}
@@ -89,16 +152,20 @@ function App() {
         <Route path='/' element={
           <>
             {!moreBtnState ? <Alert ref={alertRef} className='alert more deleted'>모든 데이터 로드 완료!</Alert> : null}
+            <Alert ref={loadingRef} className='alert more deleted'>로딩중!</Alert>
             <div className="main-bg"></div>
-            <div className="item-container">
-              {
-                shoes.map(function(a,i) {
-                  const idx = i+1
-                  return(
-                  <Link to={"/detail/"+idx} key={i}><Item data={shoes} i={i} /></Link>
-                  )
-                })
-              }
+            <div className="wrapper">
+              <div className='item-title'><p>SHOES LIST</p></div>
+              <div className="item-container">
+                {
+                  shoes.map(function(a,i) {
+                    const idx = i+1
+                    return(
+                    <Link to={"/detail/"+idx} key={i}><Item data={shoes} i={i} /></Link>
+                    )
+                  })
+                }
+              </div>
             </div>
             {
               moreBtnState ? 
@@ -106,11 +173,28 @@ function App() {
                 <div className='moreBtn' onClick={()=>{
                   getMoreData()
                 }}>
-                  더보기 ⬇︎
+                  신발 더 가져오기 ⬇︎
                 </div>
               :
                 null
             }
+            <div className="wrapper">
+              <div className="item-title"><p>More Info</p></div>
+              <div className="tab-container">
+                <div className="tab-button-container">
+                  <div ref={el=>tabBtnRef.current[0]=el} className="tab-button" onClick={()=>{tabClick(0)}}><p>tab1</p></div>
+                  <div ref={el=>tabBtnRef.current[1]=el} className="tab-button" onClick={()=>{tabClick(1)}}><p>tab2</p></div>
+                  <div ref={el=>tabBtnRef.current[2]=el} className="tab-button" onClick={()=>{tabClick(2)}}><p>tab3</p></div>
+                </div>
+                <div className="tab-content-container">
+                  <div className="tab-content">
+                    {
+                      <RenderTab idx={tabIdx}/>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
           </>
         }></Route>
 
