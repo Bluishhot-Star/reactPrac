@@ -183,7 +183,14 @@
   color: #efefefd0;
   background: #000;
 }
-
+.start{
+  opacity: 0;
+  transition: .7s;
+}
+.end{
+  opacity: 1;
+  transition: .7s;
+}
 .unselected{
   transform: scale(0);
 }

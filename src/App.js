@@ -4,6 +4,7 @@ import './App.css';
 import {Button, Container, Nav, Navbar} from 'react-bootstrap';
 import './redshoes.jpeg'
 import { useState, useRef, useEffect } from "react";
+import { flushSync } from "react-dom"
 import data from './data.js'
 import Item from './components/Item.js'
 import Tab1 from './components/Tab1.js'
@@ -141,6 +142,10 @@ function App() {
       return()=>{
         setPop("")
       }
+    },[idx])
+    useEffect(()=>{
+      flushSync(()=>{setPop("");})
+      setPop("selected")
     },[idx])
 
     return(

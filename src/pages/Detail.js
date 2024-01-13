@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import styled from "styled-components"
 import {useEffect, useState, useRef} from "react"
+import { flushSync } from "react-dom"
 
 let SkyBox = styled.div`
   background: ${props => props.background};
@@ -45,6 +46,17 @@ let Alert = styled.div`
 
 function Detail(props){
   let alertRef = useRef();
+
+  const [fade, setFade] = useState("");
+
+  useEffect(()=>{
+    flushSync(()=>{
+      setFade("")
+    })
+    setFade("end")
+  },[])
+
+
   useEffect(()=>{
     if(alertRef.current){
       try{
@@ -79,7 +91,7 @@ function Detail(props){
   // item = props.data.filter((data)=> data.id == idx-1)[0];
 
   return(
-    <div className="container">
+    <div className={"container start " + fade}>
       <Alert ref={alertRef} className='alert deleted'>🔥 5초 안에 구매하면 60% 할인! 🔥</Alert>
       <div className="row">
         <div className="col-md-6">
