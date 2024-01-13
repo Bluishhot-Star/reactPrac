@@ -96,6 +96,7 @@ function App() {
 
   const tabBtnRef = useRef([]);
   const [tabIdx, setTabIdx] = useState(0)
+  const [clicked, setClicked] = useState("")
   const tabClick = (idx)=>{
     if(tabIdx !== idx){
       tabBtnRef.current[tabIdx].classList.remove("selected");
@@ -107,6 +108,8 @@ function App() {
     tabBtnRef.current[tabIdx].classList += " selected";
   },[])
 
+  
+  
   // const RenderTab = (props)=>{
   //   switch (props.idx) {
   //     case 0:
@@ -128,8 +131,25 @@ function App() {
   // function RenderTab({idx}){
   //   return [ <Tab1/>,  <Tab2/>,  <Tab3/> ][idx]
   // }
-  function RenderTab(props){
-    return [ <Tab1/>,  <Tab2/>,  <Tab3/> ][props.idx]
+  function RenderTab({idx}){
+    const [pop, setPop] = useState("");
+    
+    useEffect(()=>{
+      setTimeout(() => {
+        setPop("selected");
+      }, 100);
+      return()=>{
+        setPop("")
+      }
+    },[idx])
+
+    return(
+      <div className={"unselected " + pop}>
+        {
+          [ <Tab1/>,  <Tab2/>,  <Tab3/> ][idx]
+        }
+      </div>
+    )
   }
 
   return (
@@ -182,9 +202,9 @@ function App() {
               <div className="item-title"><p>More Info</p></div>
               <div className="tab-container">
                 <div className="tab-button-container">
-                  <div ref={el=>tabBtnRef.current[0]=el} className="tab-button" onClick={()=>{tabClick(0)}}><p>tab1</p></div>
-                  <div ref={el=>tabBtnRef.current[1]=el} className="tab-button" onClick={()=>{tabClick(1)}}><p>tab2</p></div>
-                  <div ref={el=>tabBtnRef.current[2]=el} className="tab-button" onClick={()=>{tabClick(2)}}><p>tab3</p></div>
+                  <div ref={el=>tabBtnRef.current[0]=el} className={"tab-button "} onClick={()=>{tabClick(0)}}><p>tab1</p></div>
+                  <div ref={el=>tabBtnRef.current[1]=el} className="tab-button " onClick={()=>{tabClick(1)}}><p>tab2</p></div>
+                  <div ref={el=>tabBtnRef.current[2]=el} className="tab-button " onClick={()=>{tabClick(2)}}><p>tab3</p></div>
                 </div>
                 <div className="tab-content-container">
                   <div className="tab-content">

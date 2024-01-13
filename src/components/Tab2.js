@@ -3,7 +3,7 @@ function Tab2(props) {
   const [imgIdx, setImgIdx] = useState(props.i+1);
   return(
     <div className="tab">
-      tab2
+      TAB2
     </div>
   )
 }
