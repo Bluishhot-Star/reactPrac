@@ -54,7 +54,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  margin-bottom: 30px;
+  margin-top: 70px;
 }
 .item-title p{
   all: unset;
@@ -82,6 +83,13 @@
   background: #efefef;
   border-radius: 10px;
   position: relative;
+  transition: .3s;
+}
+.item:hover{
+  transform: translateY(-10px);
+}
+.item:active{
+  opacity: 0.3;
 }
 .item img{
   width: 100%;
